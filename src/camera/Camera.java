@@ -1,6 +1,5 @@
 package camera;
 
-import controlP5.ControlEvent;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.video.Capture;
@@ -11,26 +10,36 @@ public class Camera extends PApplet {
 	String path = selectFolder("Select your destination folder:") +"/";
 	int picNumber = 1;
 	public void setup() {
-		  myCam = new Capture(this, width, height, 30);
-
+		myCam = new Capture(this, 500, 500, 30);
 	}
 
 	public void draw() 
 	{
+		size(500, 500);
 		myCam.read();
 		image(myCam, 0, 0);
+		ellipse(width/2, height/2, 50, 50);
+
 	}
-	
+
 	public void keyPressed()
 	{
-		if(key == 'n')
+		if(key == 'a')
 		{
-			myCam.read();
-			String imgName = "face";
-			String destFile = path + imgName +"_"+ picNumber++ + ".jpeg";
-			PImage myFace = myCam;
-			println(destFile);
-			save(destFile);
+			if(myCam.available())
+			{
+				myCam.read();
+				String imgName = "face";
+				String destFile = path + imgName +"_"+ picNumber + ".jpeg";
+				picNumber++;
+				println(destFile);
+				save(destFile);
+			}
 		}
 	}
+	
+	public static void main(String args[])
+    {
+      PApplet.main(new String[] { "--present", camera.Camera.class.getName() });
+    }
 }
